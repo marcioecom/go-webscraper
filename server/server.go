@@ -1,0 +1,32 @@
+package server
+
+import (
+	"os"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
+)
+
+func SetupAndListen() {
+	app := fiber.New(fiber.Config{
+		Prefork: false,
+	})
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
+
+	app.Use(logger.New(logger.Config{
+		Format:   "[${time}]:${status}- [${method}] ${path} ${latency} \n",
+		TimeZone: "America/Sao_Paulo",
+	}))
+
+	app.Get("/metrics", monitor.New(monitor.Config{
+		Title: "My Metrics Page",
+	}))
+
+	app.Listen(":" + os.Getenv("PORT"))
+}
