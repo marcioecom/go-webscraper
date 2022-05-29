@@ -2,6 +2,7 @@ package server
 
 import (
 	"os"
+	"webscraper/server/routes"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -27,6 +28,8 @@ func SetupAndListen() {
 	app.Get("/metrics", monitor.New(monitor.Config{
 		Title: "My Metrics Page",
 	}))
+
+	routes.SetupRoutes(app)
 
 	app.Listen(":" + os.Getenv("PORT"))
 }
