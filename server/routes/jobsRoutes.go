@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"webscraper/server/handlers"
+	"webscraper/server/handler"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -9,5 +9,5 @@ import (
 func SetupJobsRoutes(app *fiber.Router) {
 	api := (*app).Group("/jobs")
 
-	api.Get("/", handlers.GetAllJobs)
+	api.Get("/", handler.GetAllJobs)
 }

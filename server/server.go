@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 )
 
 func SetupAndListen() {
@@ -24,6 +25,8 @@ func SetupAndListen() {
 		Format:   "[${time}]:${status}- [${method}] ${path} ${latency} \n",
 		TimeZone: "America/Sao_Paulo",
 	}))
+
+	app.Use(recover.New())
 
 	app.Get("/metrics", monitor.New(monitor.Config{
 		Title: "My Metrics Page",

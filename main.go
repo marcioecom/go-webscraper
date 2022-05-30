@@ -1,7 +1,11 @@
 package main
 
-import "webscraper/server"
+import (
+	"webscraper/server"
+	"webscraper/server/models"
+)
 
 func main() {
+	models.Setup()
 	server.SetupAndListen()
 }
