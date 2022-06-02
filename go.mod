@@ -3,6 +3,7 @@ module webscraper
 go 1.18
 
 require (
+	github.com/go-rod/rod v0.107.0
 	github.com/gofiber/fiber/v2 v2.34.0
 	gorm.io/driver/postgres v1.3.7
 	gorm.io/gorm v1.23.5
@@ -10,6 +11,9 @@ require (
 
 require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/ysmood/goob v0.4.0 // indirect
+	github.com/ysmood/gson v0.7.1 // indirect
+	github.com/ysmood/leakless v0.7.0 // indirect
 	gorm.io/driver/mysql v1.3.2 // indirect
 )
 
