@@ -20,7 +20,13 @@ func formatJobTimes(timeLeftStr, publishedAtStr *string) (a, b int64) {
 }
 
 func ScrapJobs() []models.Job {
+	// l := launcher.MustNewManaged("ws://crawler:7317")
+	// l.Set("disable-gpu").Delete("disable-gpu")
+	// l.Headless(false).XVFB("--server-num=5", "--server-args=-screen 0 1600x900x16")
+
+	// page := rod.New().Client(l.MustClient()).MustConnect().MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
 	page := rod.New().MustConnect().MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
+	defer page.MustClose()
 
 	page.MustWaitLoad()
 
