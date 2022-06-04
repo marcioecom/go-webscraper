@@ -5,7 +5,7 @@ import (
 )
 
 func SetupRoutes(app *fiber.App) {
-	api := app.Group("/api/v1")
+	api := app.Group("/v1")
 
 	SetupJobsRoutes(&api)
 }

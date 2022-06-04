@@ -22,11 +22,7 @@ func formatJobTimes(timeLeftStr, publishedAtStr *string) (a, b int64) {
 
 func ScrapJobs() []models.Job {
 	l := launcher.MustNewManaged("ws://crawler:7317")
-	// l.Set("disable-gpu").Delete("disable-gpu")
-	// l.Headless(false).XVFB("--server-num=5", "--server-args=-screen 0 1600x900x16")
-
 	page := rod.New().Client(l.MustClient()).MustConnect().MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
-	// page := rod.New().MustConnect().MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
 
 	defer page.MustClose()
 
@@ -57,13 +53,14 @@ func ScrapJobs() []models.Job {
 		offersResult = strings.Split(offersResult[1], " | Interessados: ")
 
 		offers := offersResult[0]
-		// interested := offersResult[1]
+		interested := offersResult[1]
 
 		job := models.Job{
 			Title:       el.MustElement("h1.title").MustText(),
 			Description: el.MustElement("div.description").MustText(),
 			Tags:        datatypes.JSON(tagsJson),
 			Offers:      offers,
+			Interested:  interested,
 			SeenAt:      time.Now(),
 			TimeLeft:    timeLeft,
 			PublishedAt: publishedAt,
