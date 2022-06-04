@@ -22,7 +22,7 @@ func SetupAndListen() {
 	}))
 
 	app.Use(logger.New(logger.Config{
-		Format:   "[${time}]:${status}- [${method}] ${path} ${latency} \n",
+		Format:   "[${time}]:${ip} -${status}- [${method}] ${path} ${latency} \n",
 		TimeZone: "America/Sao_Paulo",
 	}))
 
