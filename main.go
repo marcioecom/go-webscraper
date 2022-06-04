@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"webscraper/server"
 	"webscraper/server/models"
 
@@ -9,10 +8,7 @@ import (
 )
 
 func main() {
-	err := godotenv.Load("./.env")
-	if err != nil {
-		log.Fatal("Error to load dot env")
-	}
+	godotenv.Load("./.env")
 
 	models.Setup()
 	server.SetupAndListen()
