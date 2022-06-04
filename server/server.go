@@ -34,10 +34,5 @@ func SetupAndListen() {
 
 	routes.SetupRoutes(app)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
-	}
-
-	app.Listen(":" + port)
+	app.Listen(":" + os.Getenv("PORT"))
 }

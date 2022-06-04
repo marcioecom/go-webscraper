@@ -1,6 +1,8 @@
 package models
 
 import (
+	"os"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -8,7 +10,7 @@ import (
 var db *gorm.DB
 
 func Setup() {
-	dsn := "host=172.17.0.1 user=admin password=admin dbname=admin port=5432 sslmode=disable"
+	dsn := os.Getenv("DATABASE_URL")
 
 	var err error
 	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
