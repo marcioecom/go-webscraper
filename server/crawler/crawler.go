@@ -1,7 +1,9 @@
 package crawler
 
 import (
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log"
 	"strconv"
@@ -28,6 +30,17 @@ func formatJobTimes(timeLeftStr, publishedAtStr *string) (a, b int64) {
 	return timeLeft, publishedAt
 }
 
+func handleError(err error) {
+	var evalErr *rod.ErrEval
+	if errors.Is(err, context.DeadlineExceeded) { // timeout error
+		fmt.Println("timeout err")
+	} else if errors.As(err, &evalErr) { // eval error
+		fmt.Println(evalErr.LineNumber)
+	} else if err != nil {
+		fmt.Println("can't handle", err)
+	}
+}
+
 func scrapJobs() {
 	l := launcher.MustNewManaged("ws://crawler:7317")
 	page := rod.New().Client(l.MustClient()).MustConnect().MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
@@ -46,17 +59,36 @@ func scrapJobs() {
 	for _, el := range els {
 		tags := []string{}
 
-		skillsEl := el.MustElements("a.habilidade")
+		var skillsEl rod.Elements
+		err = rod.Try(func() {
+			skillsEl = el.MustElements("a.habilidade")
+		})
+		handleError(err)
+
 		for _, v := range skillsEl {
 			tags = append(tags, v.MustText())
 		}
 		tagsJson, _ := json.Marshal(tags)
 
-		timeLeftStr := el.MustElement("b.datetime").MustAttribute("cp-datetime")
-		publishedAtStr := el.MustElement("b.datetime-restante").MustAttribute("cp-datetime")
+		var timeLeftStr *string
+		var publishedAtStr *string
+		err = rod.Try(func() {
+			timeLeftStr = el.MustElement("b.datetime").MustAttribute("cp-datetime")
+			publishedAtStr = el.MustElement("b.datetime-restante").MustAttribute("cp-datetime")
+		})
+		handleError(err)
+
 		timeLeft, publishedAt := formatJobTimes(timeLeftStr, publishedAtStr)
 
-		information, _ := el.MustElement("p.information").Text()
+		var information string
+		err = rod.Try(func() {
+			information, err = el.MustElement("p.information").Text()
+			if err != nil {
+				panic(err)
+			}
+		})
+		handleError(err)
+
 		offersResult := strings.Split(information, "Propostas: ")
 		offersResult = strings.Split(offersResult[1], " | Interessados: ")
 
