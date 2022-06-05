@@ -10,8 +10,15 @@ import (
 
 	"github.com/go-rod/rod"
 	"github.com/go-rod/rod/lib/launcher"
+	"github.com/robfig/cron/v3"
 	"gorm.io/datatypes"
 )
+
+func SchedulerJob() {
+	c := cron.New()
+	c.AddFunc("*/1 * * * *", func() { scrapJobs() })
+	c.Start()
+}
 
 func formatJobTimes(timeLeftStr, publishedAtStr *string) (a, b int64) {
 	timeLeft, _ := strconv.ParseInt(*timeLeftStr, 10, 64)
@@ -20,7 +27,7 @@ func formatJobTimes(timeLeftStr, publishedAtStr *string) (a, b int64) {
 	return timeLeft, publishedAt
 }
 
-func ScrapJobs() {
+func scrapJobs() {
 	l := launcher.MustNewManaged("ws://crawler:7317")
 	page := rod.New().Client(l.MustClient()).MustConnect().MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
 
