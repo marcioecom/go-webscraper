@@ -20,7 +20,7 @@ func formatJobTimes(timeLeftStr, publishedAtStr *string) (a, b int64) {
 	return timeLeft, publishedAt
 }
 
-func ScrapJobs() []models.Job {
+func ScrapJobs() {
 	l := launcher.MustNewManaged("ws://crawler:7317")
 	page := rod.New().Client(l.MustClient()).MustConnect().MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
 
@@ -69,5 +69,7 @@ func ScrapJobs() []models.Job {
 		sliceOfJobs = append(sliceOfJobs, job)
 	}
 
-	return sliceOfJobs
+	for _, v := range sliceOfJobs {
+		models.UpdateJob(v)
+	}
 }

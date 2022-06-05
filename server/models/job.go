@@ -33,3 +33,23 @@ func Jobs() ([]Job, error) {
 
 	return jobs, nil
 }
+
+func CreateJob(job Job) (Job, error) {
+	tx := db.Create(&job)
+	if tx.Error != nil {
+		return Job{}, tx.Error
+	}
+
+	return job, nil
+}
+
+func CreateJobs(jobs []Job) error {
+	tx := db.Create(&jobs)
+	return tx.Error
+}
+
+func UpdateJob(job Job) {
+	if db.Model(&job).Where("title = ?", job.Title).Updates(&job).RowsAffected == 0 {
+		db.Create(&job)
+	}
+}
