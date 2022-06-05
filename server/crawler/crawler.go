@@ -2,6 +2,7 @@ package crawler
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
@@ -16,7 +17,7 @@ import (
 
 func SchedulerJob() {
 	c := cron.New()
-	c.AddFunc("*/1 * * * *", func() { scrapJobs() })
+	c.AddFunc("0 */1 * * *", func() { scrapJobs() })
 	c.Start()
 }
 
@@ -79,4 +80,10 @@ func scrapJobs() {
 	for _, v := range sliceOfJobs {
 		models.UpdateJob(v)
 	}
+
+	loc, err := time.LoadLocation("America/Sao_Paulo")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("[%v] Job runned\n", time.Now().In(loc).Format("02-Jan-2006 15:04:05"))
 }

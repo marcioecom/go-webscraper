@@ -50,6 +50,9 @@ func CreateJobs(jobs []Job) error {
 
 func UpdateJob(job Job) {
 	if db.Model(&job).Where("title = ?", job.Title).Updates(&job).RowsAffected == 0 {
-		db.Create(&job)
+		tx := db.Create(&job)
+		if tx.Error != nil {
+			panic(tx.Error)
+		}
 	}
 }

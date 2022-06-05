@@ -31,6 +31,7 @@ services:
       - postgres
       - crawler
     build: .
+    restart: always
     environment:
       - DB_HOST=postgres
       - DB_USER=${DB_USER}
