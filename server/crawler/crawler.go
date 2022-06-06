@@ -95,10 +95,13 @@ func scrapJobs() {
 		offers := offersResult[0]
 		interested := offersResult[1]
 
+		url := fmt.Sprint("https://www.99freelas.com.br" + *el.MustElement("h1.title a").MustAttribute("href"))
+
 		job := models.Job{
 			Title:       el.MustElement("h1.title").MustText(),
 			Description: el.MustElement("div.description").MustText(),
 			Tags:        datatypes.JSON(tagsJson),
+			Url:         url,
 			Offers:      offers,
 			Interested:  interested,
 			SeenAt:      time.Now(),

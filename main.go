@@ -11,7 +11,7 @@ import (
 func main() {
 	godotenv.Load("./.env")
 
-	crawler.SchedulerJob()
 	models.Setup()
+	crawler.SchedulerJob()
 	server.SetupAndListen()
 }

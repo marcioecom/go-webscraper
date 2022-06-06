@@ -12,6 +12,7 @@ type Job struct {
 	Title       string         `json:"title" gorm:"not null"`
 	Description string         `json:"description" gorm:"not null"`
 	Tags        datatypes.JSON `json:"tags"` //  gorm:"foreignKey:JobId;type:json"
+	Url         string         `json:"url"`
 	Offers      string         `json:"offers" gorm:"not null"`
 	Interested  string         `json:"interested" gorm:"not null"`
 	SeenAt      time.Time      `json:"seenAt" gorm:"not null"`
