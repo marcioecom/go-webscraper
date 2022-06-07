@@ -26,7 +26,7 @@ type Job struct {
 func Jobs() ([]Job, error) {
 	var jobs []Job
 
-	result := db.Find(&jobs)
+	result := db.Order("updated_at desc").Find(&jobs)
 
 	if result.Error != nil {
 		return []Job{}, result.Error
