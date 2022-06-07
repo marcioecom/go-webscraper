@@ -42,8 +42,17 @@ func handleError(err error) {
 }
 
 func scrapJobs() {
-	l := launcher.MustNewManaged("ws://crawler:7317")
-	page := rod.New().Client(l.MustClient()).MustConnect().MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
+	var page *rod.Page
+	err := rod.Try(func() {
+		l := launcher.MustNewManaged("ws://crawler:7317")
+		page = rod.
+			New().
+			Client(l.MustClient()).
+			CancelTimeout().
+			MustConnect().
+			MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
+	})
+	handleError(err)
 
 	defer page.MustClose()
 
