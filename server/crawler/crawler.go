@@ -48,7 +48,6 @@ func scrapJobs() {
 		page = rod.
 			New().
 			Client(l.MustClient()).
-			CancelTimeout().
 			MustConnect().
 			MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
 	})

@@ -23,10 +23,10 @@ type Job struct {
 	DeletedAt   gorm.DeletedAt `json:"deletedAt" gorm:"index"`
 }
 
-func Jobs() ([]Job, error) {
+func Jobs(page int) ([]Job, error) {
 	var jobs []Job
 
-	result := db.Order("updated_at desc").Find(&jobs)
+	result := db.Order("updated_at desc").Offset(page * 10).Limit(10).Find(&jobs)
 
 	if result.Error != nil {
 		return []Job{}, result.Error
