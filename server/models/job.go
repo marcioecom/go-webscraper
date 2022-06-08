@@ -26,8 +26,18 @@ type Job struct {
 func Jobs(page int) ([]Job, error) {
 	var jobs []Job
 
-	result := db.Order("updated_at desc").Offset(page * 10).Limit(10).Find(&jobs)
+	if page == 0 {
+		result := db.Order("updated_at desc").Find(&jobs)
 
+		if result.Error != nil {
+			return []Job{}, result.Error
+		}
+
+		return jobs, nil
+	}
+
+	page -= 1
+	result := db.Order("updated_at desc").Offset(page * 10).Limit(10).Find(&jobs)
 	if result.Error != nil {
 		return []Job{}, result.Error
 	}

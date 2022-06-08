@@ -17,5 +17,8 @@ func GetAllJobs(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(jobs)
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"length": len(jobs),
+		"jobs":   jobs,
+	})
 }
