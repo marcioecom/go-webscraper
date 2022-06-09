@@ -32,10 +32,10 @@ func Jobs(page int) ([]Job, int64, error) {
 		result := db.Order("updated_at desc").Find(&jobs)
 
 		if result.Error != nil {
-			return []Job{}, totalJobs, result.Error
+			return []Job{}, 0, result.Error
 		}
 
-		return jobs, 0, nil
+		return jobs, totalJobs, nil
 	}
 
 	page -= 1
