@@ -23,26 +23,28 @@ type Job struct {
 	DeletedAt   gorm.DeletedAt `json:"deletedAt" gorm:"index"`
 }
 
-func Jobs(page int) ([]Job, error) {
+func Jobs(page int) ([]Job, int64, error) {
 	var jobs []Job
+	var totalJobs int64
 
+	db.Table("jobs").Count(&totalJobs)
 	if page == 0 {
 		result := db.Order("updated_at desc").Find(&jobs)
 
 		if result.Error != nil {
-			return []Job{}, result.Error
+			return []Job{}, totalJobs, result.Error
 		}
 
-		return jobs, nil
+		return jobs, 0, nil
 	}
 
 	page -= 1
 	result := db.Order("updated_at desc").Offset(page * 10).Limit(10).Find(&jobs)
 	if result.Error != nil {
-		return []Job{}, result.Error
+		return []Job{}, 0, result.Error
 	}
 
-	return jobs, nil
+	return jobs, totalJobs, nil
 }
 
 func CreateJob(job Job) (Job, error) {
