@@ -54,7 +54,7 @@ func scrapJobs() {
 	})
 	handleError(err)
 
-	defer page.MustClose()
+	// defer page.MustClose()
 
 	page.MustWaitLoad()
 
