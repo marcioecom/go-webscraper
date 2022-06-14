@@ -45,20 +45,20 @@ func scrapJobs() {
 	var page *rod.Page
 	err := rod.Try(func() {
 		l := launcher.MustNewManaged("ws://crawler:7317")
+
 		page = rod.
 			New().
 			Client(l.MustClient()).
-			CancelTimeout().
 			MustConnect().
 			MustPage("https://www.99freelas.com.br/projects?order=mais-recentes&categoria=web-mobile-e-software")
 	})
 	handleError(err)
 
-	// defer page.MustClose()
+	defer (*page).MustClose()
 
-	page.MustWaitLoad()
+	(*page).MustWaitLoad()
 
-	els, err := page.Elements("li.result-item")
+	els, err := (*page).Elements("li.result-item")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
