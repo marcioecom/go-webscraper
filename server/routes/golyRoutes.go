@@ -9,5 +9,6 @@ import (
 func SetupGolyRoutes(app *fiber.Router) {
 	api := (*app).Group("/goly")
 
+	api.Get("/:redirect", handler.Redirect)
 	api.Post("/", handler.CreateGoly)
 }

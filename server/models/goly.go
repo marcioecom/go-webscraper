@@ -16,3 +16,19 @@ func CreateGoly(goly Goly) error {
 
 	return nil
 }
+
+func UpdateGoly(goly Goly) error {
+	tx := db.Save(&goly)
+	return tx.Error
+}
+
+func FindByGolyUrl(url string) (Goly, error) {
+	var goly Goly
+
+	tx := db.Where("goly = ?", url).First(&goly)
+	if tx.Error != nil {
+		return Goly{}, tx.Error
+	}
+
+	return goly, tx.Error
+}
