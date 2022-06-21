@@ -1,21 +1,6 @@
 version: '3.7'
 
 services:
-  postgres:
-    container_name: "webscrapper-db"
-    image: 'bitnami/postgresql'
-    restart: always
-    ports:
-      - '5432:5432'
-    environment:
-      - POSTGRESQL_USERNAME=${DB_USER}
-      - POSTGRESQL_PASSWORD=${DB_PASS}
-      - POSTGRESQL_DATABASE=webscrapper
-    volumes:
-      - 'postgresql_data:/bitnami/postgresql'
-    networks:
-      - default
-
   crawler:
     container_name: "webscrapper-chromium"
     image: 'ghcr.io/go-rod/rod'
@@ -32,10 +17,6 @@ services:
       - crawler
     build: .
     restart: always
-    environment:
-      - DB_HOST=postgres
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
     ports:
       - 3000:3000
     volumes:
@@ -45,6 +26,3 @@ services:
 
 networks:
   default:
-volumes:
-  postgresql_data:
-    driver: local
