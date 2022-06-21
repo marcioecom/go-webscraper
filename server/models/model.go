@@ -19,6 +19,7 @@ func Setup() {
 	}
 
 	err = db.AutoMigrate(&Job{})
+	err = db.AutoMigrate(&Goly{})
 	if err != nil {
 		panic(err)
 	}
