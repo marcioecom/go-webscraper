@@ -44,8 +44,10 @@ func handleError(err error) {
 func scrapJobs() {
 	var page *rod.Page
 	err := rod.Try(func() {
-		l := launcher.MustNewManaged("ws://crawler:7317")
-
+		l, err := launcher.NewManaged("ws://crawler:7317")
+		if err != nil {
+			panic(err.Error())
+		}
 		page = rod.
 			New().
 			Client(l.MustClient()).
